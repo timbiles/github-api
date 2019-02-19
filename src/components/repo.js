@@ -38,7 +38,7 @@ useEffect(() => {
         </Sub>
       </a>
       <Sub secondary height='20vh'>
-          <p>{description || `There is not yet a description for ${owner.login}'s repo!`}</p>
+          <p>{description || `There is not yet a description for ${owner.login}'s ${name} repo!`}</p>
           <Wrapper>
             { languages.length ?
               languages.map((el, i) => {

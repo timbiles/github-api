@@ -69,7 +69,7 @@ const Search = (props) => {
         <Loading />
       ) : error ?
       <Container primary>
-          <h2>Ooops, no user found.</h2>
+          <h2>Ooops, no user found!</h2>
           <h3>Check to make sure the name is spelled correctly!</h3>
       </Container>
       : (
