@@ -32,5 +32,6 @@ const Sub = styled.div`
     margin-bottom: ${props => props.bottom};
     background: #fff;
     padding: 1vh 1vw;
-    justify-content: ${props => props.primary && 'space-around'}
+    justify-content: ${props => props.primary && 'space-around'};
+    border-radius: ${props => props.primary ? '5px 5px 0 0 ' : '0 0 5px 5px'};
 `;
