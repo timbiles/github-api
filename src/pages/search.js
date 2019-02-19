@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-import { updateRepo } from '../ducks/reducer';
+import { updateRepo, updateName } from '../ducks/reducer';
 
 
 import Loading from '../components/loading';
@@ -16,12 +16,12 @@ const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 
 const Search = (props) => {
   const [count, setCount] = useState(8);
-  const [name, setName] = useState('timbiles');
+  // const [name, setName] = useState('timbiles');
   const [temporary, setTemp] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
 
-  const fullUrl = `${url}${name}${otherUrl}${id}${secret}`
+  const fullUrl = `${url}${props.name}${otherUrl}${id}${secret}`
 
   const getEvents = async (url) => {
       (await fetch(url))
@@ -41,16 +41,17 @@ const Search = (props) => {
           }
         });
   };
+  console.log(props.name)
   
   useEffect(() => {
     getEvents(fullUrl);
-  }, [name]);
+  }, [props.name]);
 
   const keyDown = (e) => e.key === 'Enter' && searchBar()
 
   const searchBar = () => {
     setLoading(true)
-    setName(temporary.replace(' ', ''))
+    props.updateName(temporary.replace(' ', ''))
   }
 
   const repoMap = props.repo.slice(count - 8, count).map(el => {
@@ -62,10 +63,10 @@ const Search = (props) => {
     <Main>
       <>
       <Sub justify='center'>
-          <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
+          <Input placeholder={props.name} type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
           <Button primary onClick={searchBar}>Search</Button>
       </Sub>
-      <Text>Check out their profile <StyledLink to='/profile'>here!</StyledLink></Text>
+      <Text>Check out the user's profile <StyledLink to='/profile'>here!</StyledLink></Text>
       </>
       {loading ? (
         <Loading />
@@ -94,7 +95,7 @@ const mapStateToProps = state => state;
 
 export default connect(
   mapStateToProps,
-  { updateRepo }
+  { updateRepo, updateName }
 )(Search);
 
 const Main = styled.div`
