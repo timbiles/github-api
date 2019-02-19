@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Star from './star';
 
 const repo = props => {
-  const { name, stargazers_count, description } = props.repo;
+  const { name, stargazers_count, description, owner } = props.repo;
   return (
     <Container>
       <Sub primary bottom='1vh'>
@@ -12,7 +12,7 @@ const repo = props => {
         <Star star={stargazers_count} />
       </Sub>
       <Sub height='20vh'>
-          <p>{description}</p>
+          <p>{description || `There is not yet a description for ${owner.login}'s repo!`}</p>
       </Sub>
     </Container>
   );

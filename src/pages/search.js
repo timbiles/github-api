@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Nav from '../components/nav';
+import { updateRepo } from '../ducks/reducer';
+
 import Repo from '../components/repo';
 import Loading from '../components/loading';
 
@@ -10,7 +12,7 @@ const otherUrl = '/repos?per_page=100';
 const id = `&client_id=${process.env.REACT_APP_CLIENT_ID}`;
 const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 
-const App = () => {
+const Search = (props) => {
   const [repo, setRepo] = useState([]);
   const [count, setCount] = useState(8);
   const [name, setName] = useState('timbiles');
@@ -32,7 +34,8 @@ const App = () => {
             const sort = result.sort(
               (a, b) => b.stargazers_count - a.stargazers_count
             );
-            setRepo(sort);
+            // setRepo(sort);
+            props.updateRepo(sort)
             setLoading(false);
             setError(false)
           }
@@ -50,13 +53,13 @@ const App = () => {
     setName(temporary.replace(' ', ''))
   }
 
-  const repoMap = repo.slice(count - 8, count).map(el => {
+  const repoMap = props.repo.slice(count - 8, count).map(el => {
     return <Repo repo={el} key={el.id} />;
   });
 
+
   return (
     <Main>
-      <Nav />
       <Sub justify='center'>
           <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
           <Button primary onClick={searchBar}>Search</Button>
@@ -74,7 +77,7 @@ const App = () => {
             <Button disabled={!(count > 8) && true} onClick={() => setCount(count - 8)}>
               Prev
             </Button>
-            <Button disabled={count > repo.length && true} onClick={() => setCount(count + 8)} >
+            <Button disabled={count > props.repo.length && true} onClick={() => setCount(count + 8)} >
               Next
             </Button>
           </Sub>
@@ -84,7 +87,12 @@ const App = () => {
   );
 };
 
-export default App;
+const mapStateToProps = state => state;
+
+export default connect(
+  mapStateToProps,
+  { updateRepo }
+)(Search);
 
 const Main = styled.div`
   display: flex;
@@ -119,7 +127,7 @@ const Sub = styled.div`
 `
 const Button =styled.button`
   height: 4vh;
-  border-radius: 0 5px 5px 0;
+  border-radius: ${props => props.primary ? '0 5px 5px 0' : '5px'};
   cursor: pointer;
   background: #44A1A0;
   border: 1px solid #44A1A0;
