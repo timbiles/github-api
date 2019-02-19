@@ -13,47 +13,62 @@ const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 const App = () => {
   const [repo, setRepo] = useState([]);
   const [count, setCount] = useState(8);
-  const [name, setName] = useState('biles-david');
+  const [name, setName] = useState('timbiles');
   const [temporary, setTemp] = useState('')
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false)
 
   const fullUrl = `${url}${name}${otherUrl}${id}${secret}`
-  console.log(fullUrl)
 
   const getEvents = async (url) => {
-    (await fetch(url))
-      .json()
-      .then(results => {
-        const result = results.filter(el => !el.fork);
-        const sort = result.sort(
-          (a, b) => b.stargazers_count - a.stargazers_count
-        );
-        setRepo(sort);
-        setLoading(false);
-        console.log(sort)
-      });
+      (await fetch(url))
+        .json()
+        .then(results => {
+          if(!results.length) {
+            setError(true)
+            setLoading(false)
+          } else {
+            const result = results.filter(el => !el.fork);
+            const sort = result.sort(
+              (a, b) => b.stargazers_count - a.stargazers_count
+            );
+            setRepo(sort);
+            setLoading(false);
+            setError(false)
+          }
+        });
+    
   };
   useEffect(() => {
-    console.log('hit')
     getEvents(fullUrl);
   }, [name]);
+
+  const keyDown = (e) => e.key === 'Enter' && searchBar()
+
+  const searchBar = () => {
+    setLoading(true)
+    setName(temporary.replace(' ', ''))
+  }
 
   const repoMap = repo.slice(count - 8, count).map(el => {
     return <Repo repo={el} key={el.id} />;
   });
-  console.log(name)
 
   return (
-    <>
+    <Main>
       <Nav />
+      <Sub justify='center'>
+          <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
+          <Button primary onClick={searchBar}>Search</Button>
+          </Sub>
       {loading ? (
         <Loading />
-      ) : (
-        <Main>
-          <Sub justify='center'>
-          <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} />
-          <Button primary onClick={ () => setName(temporary)}>Search</Button>
-          </Sub>
+      ) : error ?
+      <Container primary>
+        <p>There is an error</p>
+      </Container>
+      : (
+        <>
           <Container>{repoMap}</Container>
           <Sub justify='space-around'>
             <Button disabled={!(count > 8) && true} onClick={() => setCount(count - 8)}>
@@ -63,9 +78,9 @@ const App = () => {
               Next
             </Button>
           </Sub>
-        </Main>
+        </>
       )}
-    </>
+    </Main>
   );
 };
 
@@ -85,6 +100,7 @@ const Container = styled.div`
   grid-gap: 35px 5px;
   width: 95vw;
   margin: auto;
+  min-height: ${props => props.primary && '80vh'};
 `;
 
 const Input = styled.input`

@@ -22,6 +22,7 @@ const Container = styled.div`
   justify-content: center;
   width: 300px;
   height: 300px;
+  min-height: 80vh;
   margin: auto;
 `
 
