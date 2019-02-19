@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -129,6 +130,16 @@ export default connect(
   mapStateToProps,
   { updateRepo, updateName }
 )(Search);
+
+Search.propTypes = {
+  count: PropTypes.number,
+  temporary: PropTypes.string,
+  filter: PropTypes.string,
+  loading: PropTypes.bool,
+  error: PropTypes.bool,
+  searchErr: PropTypes.bool,
+  detailed: PropTypes.bool
+}
 
 const Main = styled.div`
   display: flex;

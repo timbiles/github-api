@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 import Star from './star';
@@ -55,6 +56,11 @@ useEffect(() => {
 };
 
 export default repo;
+
+repo.propTypes = {
+  languages: PropTypes.array,
+  colors: PropTypes.object
+}
 
 const Container = styled.div`
   display: flex;
