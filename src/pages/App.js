@@ -13,12 +13,15 @@ const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 const App = () => {
   const [repo, setRepo] = useState([]);
   const [count, setCount] = useState(8);
-  const [name, setName] = useState('timbiles');
+  const [name, setName] = useState('biles-david');
   const [temporary, setTemp] = useState('')
   const [loading, setLoading] = useState(true);
 
-  const getEvents = async (url, name) => {
-    (await fetch(url + name + otherUrl + id + secret))
+  const fullUrl = `${url}${name}${otherUrl}${id}${secret}`
+  console.log(fullUrl)
+
+  const getEvents = async (url) => {
+    (await fetch(url))
       .json()
       .then(results => {
         const result = results.filter(el => !el.fork);
@@ -31,14 +34,14 @@ const App = () => {
       });
   };
   useEffect(() => {
-    getEvents(url, name);
-  }, []);
+    console.log('hit')
+    getEvents(fullUrl);
+  }, [name]);
 
   const repoMap = repo.slice(count - 8, count).map(el => {
     return <Repo repo={el} key={el.id} />;
   });
-
-  console.log(temporary, name);
+  console.log(name)
 
   return (
     <>
@@ -49,7 +52,7 @@ const App = () => {
         <Main>
           <Sub justify='center'>
           <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} />
-          <Button primary onClick={() => setName(temporary)}>Search</Button>
+          <Button primary onClick={ () => setName(temporary)}>Search</Button>
           </Sub>
           <Container>{repoMap}</Container>
           <Sub justify='space-around'>
