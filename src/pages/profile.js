@@ -28,7 +28,6 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
     a {
         color: #44A1A0;
     }
@@ -41,6 +40,6 @@ const Img = styled.img`
 
 const StyledLink = styled(Link)`
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 3%;
+    left: 3%;
 `

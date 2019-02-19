@@ -8,7 +8,8 @@ const landing = () => {
     return (
         <>
             <Container>
-                <h1>CrateBind Coding Challenge</h1>
+                <h1>GitHub Repo Search</h1>
+                <h4>By Tim Biles</h4>
                 <p>Click below to search a username!</p>
                 <Link to='/search'><Button>Search!</Button></Link>
             </Container>
@@ -33,8 +34,14 @@ const Container = styled.div`
     background: #eee;
     h1 {
         animation: ${fadeIn} 3s;
+        font-size: 3.5em;
+        text-align: center;
+        
+        @media(max-width: 450px) {
+            font-size: 2.5em;
+        }
     }
-    p {
+    h4, p {
         animation: ${fadeIn} 5s;
     }
     button {
@@ -42,4 +49,5 @@ const Container = styled.div`
         font-size: 1.5em;
         height: auto;
     }
+    
 `

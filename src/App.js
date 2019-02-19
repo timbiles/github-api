@@ -11,7 +11,7 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <>
-      <Nav />
+        <Nav />
         <Switch>
               <Route exact path='/search' component={ROUTE.Search} />
               <Route exact path='/profile' component={ROUTE.Profile} />

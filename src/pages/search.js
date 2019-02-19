@@ -16,12 +16,9 @@ const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 
 const Search = (props) => {
   const [count, setCount] = useState(8);
-  // const [name, setName] = useState('timbiles');
   const [temporary, setTemp] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
-
-  const fullUrl = `${url}${props.name}${otherUrl}${id}${secret}`
 
   const getEvents = async (url) => {
       (await fetch(url))
@@ -41,8 +38,8 @@ const Search = (props) => {
           }
         });
   };
-  console.log(props.name)
   
+  const fullUrl = `${url}${props.name}${otherUrl}${id}${secret}`
   useEffect(() => {
     getEvents(fullUrl);
   }, [props.name]);
@@ -66,13 +63,14 @@ const Search = (props) => {
           <Input placeholder={props.name} type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
           <Button primary onClick={searchBar}>Search</Button>
       </Sub>
-      <Text>Check out the user's profile <StyledLink to='/profile'>here!</StyledLink></Text>
+      {!error && <Text>Check out the user's profile <StyledLink to='/profile'>here!</StyledLink></Text>}
       </>
       {loading ? (
         <Loading />
       ) : error ?
       <Container primary>
-          <h2>Ooops, no user found. Please try another name!</h2>
+          <h2>Ooops, no user found.</h2>
+          <h3>Check to make sure the name is spelled correctly!</h3>
       </Container>
       : (
         <>
@@ -117,9 +115,19 @@ const Container = styled.div`
 
   ${props => props.primary && css`
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   `}
+
+  @media(max-width: 1000px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+  }
+  @media(max-width: 650px) {
+    grid-template-columns: repeat(1, 1fr);
+    width: 85vw;
+  }
 `;
 
 const Input = styled.input`
@@ -153,9 +161,14 @@ export const Button =styled.button`
   border: 1px solid #44A1A0;
   padding: 0 1em;
   transition: .5s;
+  font-size: 1em;
 
   &:hover {
     color: #eee;
     transition: .5s;
+  }
+
+  &:active {
+    transform: scale(.97)
   }
 `

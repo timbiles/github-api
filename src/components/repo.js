@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Star from './star';
 
@@ -75,21 +75,27 @@ const Sub = styled.div`
     margin-bottom: ${props => props.bottom};
     background: #fff;
     padding: 1vh 1vw;
-    justify-content: ${props => props.primary && 'space-around'};
     border-radius: ${props => props.primary ? '5px 5px 0 0 ' : '0 0 5px 5px'};
-    cursor: ${props => props.primary && 'pointer'};
-    transition: .5s;
-    &:hover {
+
+    ${props => props.primary && css`
+      cursor: pointer;
       transition: .5s;
-      background: #f4f4f4;
+      justify-content:  space-around;
+
       p {
         transition: .5s;
-        color: #44A1A0;
       }
-    }
-    p {
-      transition: .5s;
-    }
+      
+      &:hover {
+        transition: .5s;
+        background: #f4f4f4;
+        p {
+          transition: .5s;
+          color: #44A1A0;
+        }
+      }
+    `}
+    
 `;
 
 const Wrapper = styled.div`
