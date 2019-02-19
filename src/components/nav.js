@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const nav = () => {
     return (
         <Container>
-            <h1>GitHub SearchBar</h1>
+            <Link to='/'>GitHub SearchBar</Link>
         </Container>
     );
 };
@@ -13,9 +14,14 @@ export default nav;
 
 const Container = styled.div`
     display: flex;
-    width: 100vw;
     min-height: 10vh;
     background: #0F7173;
-    color: #fff;
     padding-left: 5vw;
+
+    a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 2em;
+        margin: auto 0;
+    }
 `

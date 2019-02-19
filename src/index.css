@@ -6,6 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Raleway', sans-serif;
 }
 
 code {
@@ -14,5 +15,5 @@ code {
 }
 
 .color {
-  color: rgb(242, 242, 242);
+  color: #808080;
 }

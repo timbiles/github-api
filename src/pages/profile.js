@@ -1,11 +1,25 @@
 import React from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
-const profile = () => {
+const profile = (props) => {
+    const {repo, user} = props
+    console.log(repo)
     return (
         <div>
-            Profile
+            <h1>{user.login}</h1>
+            <Img src={user.avatar_url} alt=""/>
+            <p>Number of repos: {repo.length}</p>
         </div>
     );
 };
 
-export default profile;
+const mapStateToProps = (state) => state
+
+export default connect(mapStateToProps)(profile);
+
+const Img = styled.img`
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+`

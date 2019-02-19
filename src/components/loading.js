@@ -32,7 +32,7 @@ const extend = keyframes`
   }
   20% {
     transform: scale(1, 2.2);
-    background-color: skyblue;
+    background-color: #44A1A0;
   }
   40% {
     transform: scale(1);
@@ -40,7 +40,7 @@ const extend = keyframes`
 `
 
 const Bar = styled.div`
-    height: 20px;
+  height: 20px;
   width: 4px;
   margin-right: 4px;
   border-radius: 4px;

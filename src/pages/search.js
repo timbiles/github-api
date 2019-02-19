@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 
 import { updateRepo } from '../ducks/reducer';
 
-import Repo from '../components/repo';
+
 import Loading from '../components/loading';
+import Repo from '../components/repo';
 
 const url = 'https://api.github.com/users/';
 const otherUrl = '/repos?per_page=100';
@@ -13,7 +15,6 @@ const id = `&client_id=${process.env.REACT_APP_CLIENT_ID}`;
 const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 
 const Search = (props) => {
-  const [repo, setRepo] = useState([]);
   const [count, setCount] = useState(8);
   const [name, setName] = useState('timbiles');
   const [temporary, setTemp] = useState('')
@@ -34,14 +35,13 @@ const Search = (props) => {
             const sort = result.sort(
               (a, b) => b.stargazers_count - a.stargazers_count
             );
-            // setRepo(sort);
             props.updateRepo(sort)
             setLoading(false);
             setError(false)
           }
         });
-    
   };
+  
   useEffect(() => {
     getEvents(fullUrl);
   }, [name]);
@@ -60,15 +60,18 @@ const Search = (props) => {
 
   return (
     <Main>
+      <>
       <Sub justify='center'>
           <Input placeholder='Search a name!' type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
           <Button primary onClick={searchBar}>Search</Button>
-          </Sub>
+      </Sub>
+      <Text>Check out their profile <StyledLink to='/profile'>here!</StyledLink></Text>
+      </>
       {loading ? (
         <Loading />
       ) : error ?
       <Container primary>
-        <p>There is an error</p>
+          <h2>Ooops, no user found. Please try another name!</h2>
       </Container>
       : (
         <>
@@ -100,6 +103,7 @@ const Main = styled.div`
   justify-content: center;
   background: #eee;
   min-height: 90vh;
+  padding-bottom: 4vh;
 `;
 const Container = styled.div`
   display: grid;
@@ -109,6 +113,12 @@ const Container = styled.div`
   width: 95vw;
   margin: auto;
   min-height: ${props => props.primary && '80vh'};
+
+  ${props => props.primary && css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `}
 `;
 
 const Input = styled.input`
@@ -123,13 +133,28 @@ const Sub = styled.div`
   display: flex;
   justify-content: ${props => props.justify};
   align-items: center;
-  margin: 4vh 0;
+  margin-top: 4vh;
 `
-const Button =styled.button`
+
+const Text = styled.p`
+  text-align: center;
+  letter-spacing: 2px;
+`
+
+const StyledLink = styled(Link)`
+  color: #44A1A0;
+`
+export const Button =styled.button`
   height: 4vh;
   border-radius: ${props => props.primary ? '0 5px 5px 0' : '5px'};
   cursor: pointer;
   background: #44A1A0;
   border: 1px solid #44A1A0;
   padding: 0 1em;
+  transition: .5s;
+
+  &:hover {
+    color: #eee;
+    transition: .5s;
+  }
 `
