@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 const profile = (props) => {
     const {repo, user} = props
-    console.log(user)
     const count = repo.filter(el => el.stargazers_count > 0).reduce((tot, el) => tot += el.stargazers_count, 0)
     return (
         <Container>

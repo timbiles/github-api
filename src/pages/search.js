@@ -17,8 +17,11 @@ const secret = `&client_secret=${process.env.REACT_APP_CLIENT_SECRET}`;
 const Search = (props) => {
   const [count, setCount] = useState(8);
   const [temporary, setTemp] = useState('')
+  const [filter, setFilter] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
+  const [searchErr, setSearchErr] = useState(false)
+  const [detailed, setDetailed] = useState(false)
 
   const getEvents = async (url) => {
       (await fetch(url))
@@ -32,9 +35,9 @@ const Search = (props) => {
             const sort = result.sort(
               (a, b) => b.stargazers_count - a.stargazers_count
             );
-            props.updateRepo(sort)
+            props.updateRepo(sort);
             setLoading(false);
-            setError(false)
+            setError(false);
           }
         });
   };
@@ -51,6 +54,24 @@ const Search = (props) => {
     props.updateName(temporary.replace(' ', ''))
   }
 
+  const searchRepo = () => {
+    let filteredSearch = props.repo.filter(el => el.name.toLowerCase().includes( filter.toLowerCase()))
+    if(!!filteredSearch.length || filteredSearch === '') {
+      setSearchErr(false);
+      props.updateRepo(filteredSearch)
+    } else {
+      setLoading(true);
+      setSearchErr(true);
+      getEvents(fullUrl);
+    }
+  }
+
+  const searchReset = () => {
+    setSearchErr(false);
+    setLoading(true);
+    getEvents(fullUrl);
+  }
+ 
   const repoMap = props.repo.slice(count - 8, count).map(el => {
     return <Repo repo={el} key={el.id} />;
   });
@@ -60,10 +81,23 @@ const Search = (props) => {
     <Main>
       <>
       <Sub justify='center'>
-          <Input placeholder={props.name} type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
-          <Button primary onClick={searchBar}>Search</Button>
+          <Input primary placeholder={props.name} type="text" onChange={e => setTemp(e.target.value)} onKeyDown={keyDown}/>
+          <Button secondary onClick={searchBar}>Search</Button>
+          <Button primary onClick={() => setDetailed(!detailed)}>Detailed Search</Button>
       </Sub>
-      {!error && <Text>Check out the user's profile <StyledLink to='/profile'>here!</StyledLink></Text>}
+      {!error && 
+        <>
+        <Text>Check out the user's profile <StyledLink to='/profile'>here!</StyledLink>
+        </Text>
+        { detailed && <Sub justify='center'>
+          <Input onChange={e => setFilter(e.target.value)}/>
+          <Button secondary onClick={searchRepo}>Search Repos</Button>
+          <Button primary onClick={searchReset}>Reset</Button>
+        </Sub>}
+        {searchErr && <Text primary>Uh, oh! No matched search.</Text>}
+        </>
+        }
+
       </>
       {loading ? (
         <Loading />
@@ -131,7 +165,7 @@ const Container = styled.div`
 `;
 
 const Input = styled.input`
-  width: 60vw;
+  width: ${props => props.primary ? '60vw' : '30vw'};
   height: 4vh;
   padding: 0;
   border: 0;
@@ -142,12 +176,13 @@ const Sub = styled.div`
   display: flex;
   justify-content: ${props => props.justify};
   align-items: center;
-  margin-top: 4vh;
+  margin: 2vh 0;
 `
 
 const Text = styled.p`
   text-align: center;
   letter-spacing: 2px;
+  color: ${props => props.primary && '#f00'}
 `
 
 const StyledLink = styled(Link)`
@@ -155,7 +190,8 @@ const StyledLink = styled(Link)`
 `
 export const Button =styled.button`
   height: 4vh;
-  border-radius: ${props => props.primary ? '0 5px 5px 0' : '5px'};
+  border-radius: ${props => props.primary ? '0 5px 5px 0' : props.secondary ? '0' : '5px'};
+  margin-right: ${props=> props.secondary && '5px'};
   cursor: pointer;
   background: #44A1A0;
   border: 1px solid #44A1A0;

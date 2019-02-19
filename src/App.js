@@ -15,6 +15,7 @@ const App = () => {
         <Switch>
               <Route exact path='/search' component={ROUTE.Search} />
               <Route exact path='/profile' component={ROUTE.Profile} />
+              <Route exact path='/repo:id' component={ROUTE.Profile} />
               <Route exact path='/' component={ROUTE.Landing} />
             </Switch>
 
